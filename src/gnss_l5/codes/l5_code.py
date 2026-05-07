@@ -107,8 +107,8 @@ _XB_INITIAL_STATES: dict[int, tuple[str, str]] = {
 
 # XA reset detection state in internal [s1..s13] representation.
 # Corresponds to code vector 1111111111101 (IS-GPS-705J Figure 3-2):
-#   s1=0, s2..s13=1.
-_XA_RESET_STATE: list[int] = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+_XA_RESET_STATE: list[int] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
 
 
 # ---------------------------------------------------------------------------

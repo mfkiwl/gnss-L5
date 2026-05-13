@@ -117,27 +117,28 @@ _XA_RESET_STATE: list[int] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
 
 def _parse_code_vector(cv: str) -> list[int]:
     """Convert an ICD code vector string to internal state list [s1..s13].
-
+ 
     ICD code vector format (IS-GPS-705J Section 3.3.2.2):
-      - Position 0 (leftmost) = s12
-      - Positions 1..11 = s11 down to s1
-      - Position 12 (rightmost) = s13
-
+      Reading left to right: s1, s2, ..., s12, s13.
+      The leftmost character is stage 1 (lowest-numbered stage, last to
+      reach the output).  The rightmost character is stage 13 (current
+      output, first bit out).
+ 
     Internal format: state[i] = s(i+1), so state[0]=s1, state[12]=s13.
-
+ 
     Parameters
     ----------
     cv : str
         13-character binary string in ICD code vector notation.
-
+ 
     Returns
     -------
     list[int]
         State as list of 13 integers (0 or 1), index 0 = s1, index 12 = s13.
     """
     assert len(cv) == 13, f"Code vector must be 13 characters, got {len(cv)}"
-    # Positions 11..0 in cv give s1..s12; position 12 gives s13.
-    return [int(cv[11 - i]) for i in range(12)] + [int(cv[12])]
+    # cv[i] = s(i+1) for i in 0..11; cv[12] = s13.
+    return [int(c) for c in cv]
 
 
 def _generate_xa() -> np.ndarray:
@@ -279,7 +280,8 @@ class L5Code:
     def chips_bipolar(self) -> np.ndarray:
         """10230-chip bipolar code sequence, dtype int8, values +1 or -1.
 
-        Mapping: binary 0 → +1, binary 1 → -1.
+        Mapping: binary 0 → +1, binary 1 → -1.  This is commonly used 
+        in the GPS community.
         Computed on demand from ``self.chips``; not stored separately.
         """
         return (1 - 2 * self.chips).astype(np.int8)

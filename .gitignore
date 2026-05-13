@@ -33,4 +33,4 @@ Thumbs.db
 src/*.egg-info/
 __pycache__/
 *.pyc
-EOF
+EOFplots/

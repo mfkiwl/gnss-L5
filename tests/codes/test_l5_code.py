@@ -11,23 +11,23 @@ import numpy as np
 import pytest
 from gnss_l5.codes.l5_code import L5Code
 
-
 # ---------------------------------------------------------------------------
 # ICD ground truth fixtures
 # First 10 chips from IS-GPS-705 Table 3-Ia, expressed as lists of 0/1.
-# The chip sequence from an initial state reads: cv[12] first (rightmost,
-# stage 13, present output), then cv[0], cv[1], ..., cv[11] (stages 12
-# down to 1, which propagate to the output on successive clocks).
-# This is NOT a simple right-to-left reading of the code vector string.
+# The chip sequence from an initial state reads out stage 13 first (the
+# rightmost character of the code vector string), then on each successive
+# clock the register shifts so that stage 12 becomes stage 13, and so on.
+# Reading the code vector left to right gives stages s1..s12, s13 in
+# ascending order.
 # ---------------------------------------------------------------------------
-
+ 
 ICD_FIRST_10_CHIPS = {
-    (1, "I5"): [1, 1, 0, 1, 0, 1, 0, 0, 0, 1],  # from Table 3-Ia
-    (1, "Q5"): [1, 0, 1, 1, 0, 1, 0, 0, 1, 1],  # from Table 3-Ia
-    (2, "I5"): [0, 0, 0, 1, 1, 1, 1, 1, 0, 0],  # from Table 3-Ia
-    (2, "Q5"): [1, 1, 0, 1, 1, 1, 0, 0, 0, 0],  # from Table 3-Ia
-    (3, "I5"): [1, 1, 0, 1, 1, 1, 1, 1, 1, 1],  # from Table 3-Ia
-    (3, "Q5"): [0, 0, 0, 0, 0, 1, 1, 1, 0, 1],  # from Table 3-Ia
+    (1, "I5"): [1, 1, 0, 1, 1, 0, 0, 0, 1, 0],
+    (1, "Q5"): [1, 1, 0, 0, 1, 1, 0, 0, 1, 0],
+    (2, "I5"): [0, 1, 0, 1, 0, 0, 1, 1, 1, 1],
+    (2, "Q5"): [1, 0, 0, 1, 0, 0, 0, 0, 1, 1],
+    (3, "I5"): [1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+    (3, "Q5"): [0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
 }
 
 
